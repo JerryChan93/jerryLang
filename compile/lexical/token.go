@@ -1,5 +1,10 @@
 package lexical
 
+import (
+	"fmt"
+	"strings"
+)
+
 type LexicalTokenType int32
 
 const (
@@ -28,11 +33,33 @@ func (self *LexicalToken) TokenValue() string {
 	return self.tokenValue
 }
 
+func genStrToken(data string) *LexicalToken {
+	if data == "var" {
+		return NewToken(Token_VAR, data)
+	} else if data[len(data)-1] == ':' {
+		return NewToken(Token_VAR_ASSIGN, data)
+	} else {
+		return NewToken(Token_STR, data)
+	}
+}
+
+func genDigitalToken(data string) *LexicalToken {
+	if strings.Index(data, ".") != -1 {
+		return NewToken(Token_FLOAT, data)
+	} else {
+		return NewToken(Token_INT, data)
+	}
+}
+
+func (self *LexicalToken) log() string {
+	fmt.Println("tokenType: ", self.tokenType, "tokenValue: ", self.tokenValue)
+	return self.tokenValue
+}
+
 func NewToken(tokenType LexicalTokenType, tokenValue string) *LexicalToken {
-	var p *LexicalToken = new(LexicalToken)
+	var p = new(LexicalToken)
 	p.tokenType = tokenType
 	p.tokenValue = tokenValue
 
 	return p
-
 }
