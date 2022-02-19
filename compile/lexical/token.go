@@ -2,30 +2,35 @@ package lexical
 
 import (
 	"fmt"
+	"jerryLang/compile/commom"
 	"strings"
 )
 
-type LexicalTokenType int32
+type TokenType int32
+
+type Tokens[T comparable] struct {
+	commom.List[T]
+}
 
 const (
-	Token_VAR        LexicalTokenType = 0
-	Token_CHAR       LexicalTokenType = 1
-	Token_STR        LexicalTokenType = 2
-	Token_INT        LexicalTokenType = 3
-	Token_FLOAT      LexicalTokenType = 4
-	Token_BYTE       LexicalTokenType = 5
-	Token_VECTOR     LexicalTokenType = 6
-	Token_MAP        LexicalTokenType = 7
-	Token_TUPLE      LexicalTokenType = 8
-	Token_VAR_ASSIGN LexicalTokenType = 9
+	Token_VAR        TokenType = 0
+	Token_CHAR       TokenType = 1
+	Token_STR        TokenType = 2
+	Token_INT        TokenType = 3
+	Token_FLOAT      TokenType = 4
+	Token_BYTE       TokenType = 5
+	Token_VECTOR     TokenType = 6
+	Token_MAP        TokenType = 7
+	Token_TUPLE      TokenType = 8
+	Token_VAR_ASSIGN TokenType = 9
 )
 
 type LexicalToken struct {
-	tokenType  LexicalTokenType
+	tokenType  TokenType
 	tokenValue string
 }
 
-func (self *LexicalToken) TokenType() LexicalTokenType {
+func (self *LexicalToken) TokenType() TokenType {
 	return self.tokenType
 }
 
@@ -51,12 +56,12 @@ func genDigitalToken(data string) *LexicalToken {
 	}
 }
 
-func (self *LexicalToken) log() string {
+func (self *LexicalToken) Log() string {
 	fmt.Println("tokenType: ", self.tokenType, "tokenValue: ", self.tokenValue)
 	return self.tokenValue
 }
 
-func NewToken(tokenType LexicalTokenType, tokenValue string) *LexicalToken {
+func NewToken(tokenType TokenType, tokenValue string) *LexicalToken {
 	var p = new(LexicalToken)
 	p.tokenType = tokenType
 	p.tokenValue = tokenValue

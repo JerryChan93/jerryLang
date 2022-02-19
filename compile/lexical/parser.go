@@ -5,19 +5,19 @@ import (
 	"unicode"
 )
 
-func Parse(filename string) *Tokens {
+func Parse(filename string) *Tokens[*LexicalToken] {
 	var lines = getFileLines(filename)
 	tokens := handleParse(lines)
 	return tokens
 }
 
-func handleParse(lines []string) *Tokens {
-	tokens := NewTokens()
+func handleParse(lines []string) *Tokens[*LexicalToken] {
+	var tokens = Tokens[*LexicalToken]{}
 	length := len(lines)
 	for i := 0; i < length; i++ {
-		parseLine(tokens, lines[i])
+		parseLine(&tokens, lines[i])
 	}
-	return tokens
+	return &tokens
 }
 
 func genTokenStr(line string, start int, end int) string {
@@ -31,20 +31,21 @@ func genTokenStr(line string, start int, end int) string {
 	return data
 }
 
-func parseLine(self *Tokens, line string) []*Tokens {
+func parseLine(self *Tokens[*LexicalToken], line string) *commom.List[*LexicalToken] {
 	var specialList = []byte{'=', '>', '<', '!', '+', '-', '*', '\\'}
 	for i := 0; i < len(line); i++ {
 		if unicode.IsLetter(rune(line[i])) {
 			end := stringEnd(line, i)
 			var data = genTokenStr(line, i, end)
-			self.add(genStrToken(data))
+			token := genStrToken(data)
+			self.Push(token)
 			i = end
 			continue
 		}
 		if unicode.IsDigit(rune(line[i])) {
 			end := digitEnd(line, i)
 			var data = genTokenStr(line, i, end)
-			self.add(genDigitalToken(data))
+			self.Push(genDigitalToken(data))
 			i = end
 			continue
 		}
@@ -52,7 +53,7 @@ func parseLine(self *Tokens, line string) []*Tokens {
 		if commom.InArray(specialList, code) {
 			end := stringEnd(line, i)
 			var data = genTokenStr(line, i, end)
-			self.add(genStrToken(data))
+			self.Push(genStrToken(data))
 			i = end
 			continue
 		}

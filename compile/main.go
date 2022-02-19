@@ -2,6 +2,7 @@ package main
 
 import (
 	"jerryLang/compile/lexical"
+	"jerryLang/compile/syntax"
 	"os"
 )
 
@@ -12,6 +13,6 @@ func main() {
 
 	// 词法解析 -> tokens
 	tokens := lexical.Parse(filename)
-	// 语法解析 -> 语法树
-	tokens.Log()
+	// 语法解析 -> 抽象语法树
+	syntax.Parse(tokens)
 }
