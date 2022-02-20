@@ -6,23 +6,27 @@ import (
 	"strings"
 )
 
-type TokenType int32
+type TokenType string
 
 type Tokens[T comparable] struct {
 	commom.List[T]
 }
 
 const (
-	Token_VAR        TokenType = 0
-	Token_CHAR       TokenType = 1
-	Token_STR        TokenType = 2
-	Token_INT        TokenType = 3
-	Token_FLOAT      TokenType = 4
-	Token_BYTE       TokenType = 5
-	Token_VECTOR     TokenType = 6
-	Token_MAP        TokenType = 7
-	Token_TUPLE      TokenType = 8
-	Token_VAR_ASSIGN TokenType = 9
+	Token_VAR        TokenType = "_VAR_"
+	Token_CHAR       TokenType = "char"
+	Token_STR        TokenType = "str"
+	Token_INT        TokenType = "int"
+	Token_FLOAT      TokenType = "float"
+	Token_BYTE       TokenType = "byte"
+	Token_VECTOR     TokenType = "vector"
+	Token_MAP        TokenType = "map"
+	Token_TUPLE      TokenType = "tuple"
+	Token_VAR_ASSIGN TokenType = "varAssign"
+	Token_INT_TYPE   TokenType = "intType"
+	Token_FLOAT_TYPE TokenType = "floatType"
+	Token_STR_TYPE   TokenType = "strType"
+	Token_EQUAL_SIGN TokenType = "="
 )
 
 type LexicalToken struct {
@@ -43,6 +47,14 @@ func genStrToken(data string) *LexicalToken {
 		return NewToken(Token_VAR, data)
 	} else if data[len(data)-1] == ':' {
 		return NewToken(Token_VAR_ASSIGN, data)
+	} else if data == "int" {
+		return NewToken(Token_INT_TYPE, data)
+	} else if data == "float" {
+		return NewToken(Token_FLOAT_TYPE, data)
+	} else if data == "str" {
+		return NewToken(Token_STR_TYPE, data)
+	} else if data == "=" {
+		return NewToken(Token_EQUAL_SIGN, data)
 	} else {
 		return NewToken(Token_STR, data)
 	}

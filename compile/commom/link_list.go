@@ -5,8 +5,8 @@ import (
 )
 
 type List[T comparable] struct {
-	head, tail *node[T]
-	len        int
+	head, tail, current *node[T]
+	len                 int
 }
 
 type node[T comparable] struct {
@@ -35,6 +35,17 @@ func (self *List[T]) Push(data T) {
 	self.len += 1
 }
 
+func (self *List[T]) Pop() T {
+	var res T
+	if self.IsEmpty() {
+		return res
+	}
+	res = self.head.data
+	self.head = self.head.next
+	self.len -= 1
+	return res
+}
+
 func (self *List[T]) Del(data T) {
 	for p := self.head; p != nil; p = p.next {
 		if data != p.data {
@@ -58,7 +69,7 @@ func (self *List[T]) Del(data T) {
 
 func (l *List[T]) Each(f func(T)) {
 	if l.IsEmpty() {
-		fmt.Println("the link list is empty.")
+		//fmt.Println("the link list is empty.")
 		return
 	}
 	for p := l.head; p != nil; p = p.next {
